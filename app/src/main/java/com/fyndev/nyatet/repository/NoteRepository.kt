@@ -1,5 +1,6 @@
 package com.fyndev.nyatet.repository
 
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.fyndev.nyatet.entity.NoteEntity
 
@@ -22,6 +23,11 @@ class NoteRepository(private val noteDataSource: NoteDataSource) {
 
     suspend fun deleteAll() {
         noteDataSource.deleteAll()
+    }
+
+    @WorkerThread
+    fun getSearch(title: String): LiveData<List<NoteEntity>> {
+        return noteDataSource.getSearchResults(title)
     }
 
 }

@@ -10,4 +10,5 @@ class NoteDataSource(private val noteDao: NoteDao) {
     suspend fun updateNote(noteEntity: NoteEntity) = noteDao.update(noteEntity)
     suspend fun deleteNote(noteEntity: NoteEntity) = noteDao.delete(noteEntity)
     suspend fun deleteAll() = noteDao.deleteAll()
+    fun getSearchResults(title: String) = noteDao.getSearchResults(title)
 }

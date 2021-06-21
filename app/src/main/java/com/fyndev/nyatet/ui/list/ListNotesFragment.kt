@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ class ListNotesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val listNotesViewModel: ListNotesViewModel by viewModel()
+    private lateinit var listNoteAdapter: ListNotesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +35,7 @@ class ListNotesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val listNoteAdapter = ListNotesAdapter()
+        listNoteAdapter = ListNotesAdapter()
         listNotesViewModel.getAllNotes().observe(viewLifecycleOwner, {
             if (it != null && it.isNotEmpty()) {
                 listNoteAdapter.setData(it)
@@ -69,8 +71,35 @@ class ListNotesFragment : Fragment() {
         })
     }
 
+    private fun getItemFromDb(searchText: String) {
+        val search = "%$searchText%"
+        listNotesViewModel.getSearchResults(search).observe(this, {
+            it?.let {
+                listNoteAdapter.setData(it)
+            }
+        })
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_menu, menu)
+        val item = menu.findItem(R.id.search)
+        val searchView = item.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    getItemFromDb(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    getItemFromDb(newText)
+                }
+                return true
+            }
+
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

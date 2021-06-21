@@ -13,6 +13,10 @@ class ListNotesViewModel(private val noteRepository: NoteRepository) : ViewModel
         return noteRepository.getAllNotes()
     }
 
+    fun getSearchResults(title: String): LiveData<List<NoteEntity>> {
+        return noteRepository.getSearch(title)
+    }
+
     fun deleteAll() {
         viewModelScope.launch(Dispatchers.IO) {
             noteRepository.deleteAll()
