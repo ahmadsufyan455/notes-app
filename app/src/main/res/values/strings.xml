@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Nyatet</string>
+    <string name="add_note">Add Note</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="submit">Save</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="delete_all">Delete All</string>
+    <string name="empty_note">Empty Note</string>
+</resources>
